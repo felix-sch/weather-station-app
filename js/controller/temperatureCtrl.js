@@ -1,21 +1,17 @@
 angular
   .module('weatherApp')
-  .controller('TemperatureCtrl', ['$scope', function($scope) {
+  .controller('TemperatureCtrl', ['$scope', 'DataService', 'CHARTS', function($scope, DataService, CHARTS) {
 
-    $scope.options = {
-      data: [
-        { temp: 16 }, { temp: 15 }, {temp: 17 } , { temp: 17} , { temp: 5} , { temp: 22} , { temp: 21} , { temp: 7} , { temp: 23} , { temp: 24} , { temp: 24} , { temp: 10} , { temp: 20} , { temp: 6} , { temp: 21} , { temp: 16} , { temp: 5} , { temp: 17} , { temp: 23} , { temp: 15} , { temp: 13 }
-      ],
-      dimensions: {
-        temp: {
-          axis: 'y',
-            type: 'spline',
-            label: true,
-            color: 'orange',
-            postfix: '°C',
-            name: 'Temperature'
-          }
-      }
-    };
+    $scope.data = [['time'], ['temp']];
 
+    $scope.options = CHARTS.TEMPERATURE;
+
+    var count = 0;
+
+    $scope.$on('data:updated', function(event, newData) {
+      var length = ++count < 10 ? 0 : 1;
+      $scope.instance.flow({
+        columns: newData, duration: 1000, length: length
+      });
+    });
   }])
